@@ -10,26 +10,47 @@ const pinataApiSecret = process.env.PINATA_API_SECRET;
 const pinatajwt = process.env.PINATA_JWT;
 
 // Function to generate certificate
-async function generateCertificate(userName, score, qrData, date) {
-  const template = await loadImage('./template/certTemplate.png');
+async function generateCertificate(userName, score, qrData, date, courseName) {
+  const template = await loadImage('./template/template.png');
   const canvas = createCanvas(template.width, template.height);
   const ctx = canvas.getContext('2d');
   ctx.drawImage(template, 0, 0);
-  ctx.font = '20px Arial';
-  ctx.fillStyle = 'black';
-  ctx.fillText(userName, 30, 170);
-  ctx.fillText(score, 300, 170);
-  ctx.fillText(date, 300, 410);
+  ctx.font = 'bold 20px Arial';
+  ctx.fillStyle = '#203D58';
 
+  
+  // ctx.fillStyle red= '#D65D45';
+  // ctx.fillStyle blue= '#203D58';
+  ctx.fillText("HIR3", 480, 180);
+  ctx.fillText("Certificate Of Completion", 390, 210);
+  ctx.fillText(`This certificate is awarded to ${userName}`, 340, 680);
+  ctx.fillText(`for the successful completion of the course`, 310, 700);
+  ctx.fillText(`with a score of ${score}`, 400, 720);
+  ctx.fillText(`Congratulations on your achievement`, 340, 750);
+  ctx.fillText(`and dedication`, 430, 770);
+
+  ctx.fillText(date, 450, 800);
+
+  // Adjusted QR code settings
   const qrCodeDataUrl = await QRCode.toDataURL(qrData, {
     errorCorrectionLevel: 'L',
     type: 'image/png',
-    width: 200,
-    margin: 4
+    width: 100, // Smaller width
+    margin: 1 // Smaller margin
   });
 
   const qrCodeImage = await loadImage(qrCodeDataUrl);
-  ctx.drawImage(qrCodeImage, 240, 200);
+
+  // Draw red background
+  const qrX = 866; // X position of QR code
+  const qrY = 866; // Y position of QR code
+  const qrWidth = 100; // QR code width
+  const qrHeight = 100; // QR code height
+  ctx.fillStyle = 'red';
+  ctx.fillRect(qrX, qrY, qrWidth, qrHeight);
+
+  // Draw QR code on top of red background
+  ctx.drawImage(qrCodeImage, qrX, qrY, qrWidth, qrHeight);
 
   const outputPath = './output/generated_certificate.png';
   fs.mkdirSync('output', { recursive: true });
@@ -40,6 +61,7 @@ async function generateCertificate(userName, score, qrData, date) {
 
   return outputPath;
 }
+
 
 // Function to upload file to Pinata
 async function uploadToPinata(filePath) {
@@ -92,4 +114,5 @@ async function generateAndUploadToPinata(userName, score, date, qrData) {
   }
 }
 
-generateAndUploadToPinata('User JS 2', '80/100', '06/26/2024', 'http://localhost/test');
+// generateAndUploadToPinata('User JS 2', '80/100', '06/26/2024', 'http://localhost/test', "JavaScript");
+generateCertificate('ELMAHDANI Souhail', '100/100','http://localhost/test', '06/26/2024', "JavaScript");
