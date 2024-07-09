@@ -25,7 +25,7 @@ async function generateCertificate(userName, score, qrData, date, courseName) {
   ctx.fillText("Certificate Of Completion", 390, 210);
   ctx.fillText(`This certificate is awarded to ${userName}`, 340, 680);
   ctx.fillText(`for the successful completion of the course`, 310, 700);
-  ctx.fillText(`with a score of ${score}`, 400, 720);
+  ctx.fillText(`${courseName} with a score of ${score}`, 400, 720);
   ctx.fillText(`Congratulations on your achievement`, 340, 750);
   ctx.fillText(`and dedication`, 430, 770);
 
